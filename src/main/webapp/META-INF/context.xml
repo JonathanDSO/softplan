@@ -1,0 +1,13 @@
+<Context>
+
+	<!-- DEV -->
+	<Resource name="jdbc/testeSoftplan" auth="Container"
+		type="javax.sql.DataSource" driverClassName="org.postgresql.Driver"
+		url="jdbc:postgresql://localhost/softplan" username="postgres"
+		password="admin" maxTotal="20" maxIdle="2" maxWaitMillis="5000" />
+	<Manager pathname="" />
+	
+
+
+
+</Context>

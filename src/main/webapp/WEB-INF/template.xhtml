@@ -1,0 +1,51 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<h:outputStylesheet name="primeicons/primeicons.css"
+		library="primefaces" />
+	<h:outputScript name="js/primefaces_locales.js" />
+	<style>
+.footer {
+	position: relative;
+	float: bottom;
+	bottom: 0;
+	width: 100%;
+	color: white;
+	text-align: center;
+	left: 0;
+}
+
+.menu {
+	position: relative;
+	float: left;
+}
+
+.layout-menubar {
+	position: fixed;
+}
+</style>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$("input").attr("autocomplete", "nope");
+		});
+	</script>
+</h:head>
+<h:body>
+	<h:form>
+		<p:growl id="growl" showDetail="true" showSummary="false" />
+
+		<p:menubar id="menuBar">
+			<p:menuitem value="Pessoas" process="@this"
+				action="#{templateBean.redirecionaPessoa}" />
+			<f:facet name="options">
+				<p:commandButton value="Logout" icon="pi pi-home" process="@this"
+					actionListener="#{loginBean.log_out}" />
+			</f:facet>
+		</p:menubar>
+	</h:form>
+	<ui:insert name="content" />
+</h:body>
+</html>

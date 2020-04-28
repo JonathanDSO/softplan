@@ -1,0 +1,39 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>Login</title>
+</h:head>
+
+<h:body>
+
+	<h:form>
+
+		<p:growl id="growl" sticky="true" showDetail="true" life="3000" />
+
+		<p:panel id="painel" header="Acesso"
+			style="position: relative; width: 400px; margin: auto; margin-top: 200px;">
+			<center>
+				<h:panelGrid columns="2" cellpadding="5">
+					<h:outputLabel for="login" value="Usuário:" />
+					<p:inputText id="login" value="#{loginBean.login}" required="true"
+						label="Login" maxlength="11" />
+					<h:outputLabel for="senha" value="Senha:" />
+					<p:password id="senha" value="#{loginBean.senha}" required="true"
+						label="Senha" />
+				</h:panelGrid>
+				<br />
+				<p:commandButton id="btnEntrar" value="Entrar" update="growl"
+					action="#{loginBean.log_in}" oncomplete="PF('bui').hide()" />
+			</center>
+		</p:panel>
+
+		<p:blockUI block="painel" trigger="btnEntrar" widgetVar="bui">
+			Aguarde<br />
+			<p:graphicImage name="images/ajaxloadingbar.gif" />
+		</p:blockUI>
+
+	</h:form>
+</h:body>
+</html>

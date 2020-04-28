@@ -1,0 +1,130 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+	<ui:define name="head">
+	</ui:define>
+	<ui:define name="content">
+		<h:form id="pessoaForm">
+			<p:panel id="painel">
+				<p:dataTable id="dataTable" var="pessoa"
+					value="#{pessoaBean.pessoas}">
+					<p:column style="width:32px">
+						<p:commandLink update="formDialog:display"
+							styleClass="ui-icon pi pi-pencil"
+							actionListener="#{pessoaBean.editarCadastro}"
+							oncomplete="PF('pessoaDialog').show()">
+							<f:setPropertyActionListener value="#{pessoa}"
+								target="#{pessoaBean.pessoa}" />
+						</p:commandLink>
+					</p:column>
+					<p:column style="width:32px">
+						<p:commandLink update="formDialog:display"
+							styleClass="ui-icon pi pi-trash" action="#{pessoaBean.remover}">
+							<f:setPropertyActionListener value="#{pessoa}"
+								target="#{pessoaBean.pessoa}" />
+							<p:confirm header="Confirmação"
+								message="Tem certeza que quer excluir?"
+								icon="pi pi-exclamation-triangle" />
+						</p:commandLink>
+					</p:column>
+					<p:column headerText="Nome">
+						<h:outputText value="#{pessoa.nome}" />
+					</p:column>
+					<p:column headerText="Sexo">
+						<h:outputText value="#{pessoa.sexo}" />
+					</p:column>
+					<p:column headerText="E-mail">
+						<h:outputText value="#{pessoa.email}" />
+					</p:column>
+					<p:column headerText="Data de nascimento">
+						<h:outputText value="#{pessoa.dataNascimento}">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+					<p:column headerText="Naturalidade">
+						<h:outputText value="#{pessoa.naturalidade}" />
+					</p:column>
+					<p:column headerText="Nacionalidade">
+						<h:outputText value="#{pessoa.nacionalidade}" />
+					</p:column>
+					<p:column headerText="CPF">
+						<h:outputText value="#{pessoa.cpf}" />
+					</p:column>
+				</p:dataTable>
+			</p:panel>
+
+			<p:commandButton update="formDialog:display"
+				style="margin-top: 10px;" oncomplete="PF('pessoaDialog').show()"
+				value="Novo cadastro" actionListener="#{pessoaBean.novoCadastro}">
+			</p:commandButton>
+
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+				<p:commandButton value="Sim" type="button" update="dataTable"
+					styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+				<p:commandButton value="Não" type="button"
+					styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+			</p:confirmDialog>
+
+		</h:form>
+
+		<h:form id="formDialog">
+			<p:dialog id="formulario" header="Dados" widgetVar="pessoaDialog"
+				resizable="false" draggable="false" showEffect="fade"
+				visible="#{pessoaBean.formularioAberto}" hideEffect="fade"
+				modal="true">
+
+				<p:growl id="growl" showDetail="true" showSummary="false" />
+
+				<p:outputPanel id="display">
+					<p:panelGrid columns="2" cellpadding="5"
+						rendered="#{pessoaBean.pessoa != null}">
+						<p:outputLabel for="@next" value="Nome Completo" />
+						<p:inputText value="#{pessoaBean.pessoa.nome}" required="true" />
+
+						<p:outputLabel for="@next" value="Sexo" />
+						<p:selectOneMenu value="#{pessoaBean.pessoa.sexo}">
+							<f:selectItem itemLabel="Selecione..." itemValue=""
+								noSelectionOption="true" />
+							<f:selectItems value="#{pessoaBean.sexos}" />
+						</p:selectOneMenu>
+
+
+						<p:outputLabel for="@next" value="E-mail" />
+						<p:inputText value="#{pessoaBean.pessoa.email}"
+							validatorMessage="E-mail não é válido">
+							<f:validateRegex
+								pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
+						</p:inputText>
+
+
+						<p:outputLabel for="@next" value="Data Nascimento" />
+						<p:calendar required="true"
+							value="#{pessoaBean.pessoa.dataNascimento}" pattern="dd/MM/yyyy"
+							maxdate="today" mask="true" locale="pt_BR" />
+
+						<p:outputLabel for="@next" value="Naturalidade" />
+						<p:inputText value="#{pessoaBean.pessoa.naturalidade}" />
+
+						<p:outputLabel for="@next" value="Nacionalidade" />
+						<p:inputText value="#{pessoaBean.pessoa.nacionalidade}" />
+
+						<p:outputLabel for="@next" value="CPF" />
+						<p:inputMask value="#{pessoaBean.pessoa.cpf}" required="true"
+							mask="999.999.999-99">
+							<f:ajax listener="#{pessoaBean.verificarCPF}" render="painel" />
+						</p:inputMask>
+
+					</p:panelGrid>
+					<p:commandButton id="btnCadastrar" value="Cadastrar"
+						action="#{pessoaBean.salvar}" ajax="false" icon="pi pi-save"
+						style="margin-right:20px;margin-top: 10px;"
+						update="pessoaForm:painel"></p:commandButton>
+				</p:outputPanel>
+			</p:dialog>
+			<p:defaultCommand target="btnCadastrar" />
+		</h:form>
+
+	</ui:define>
+</ui:composition>
